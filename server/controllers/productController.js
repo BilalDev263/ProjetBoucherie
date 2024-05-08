@@ -1,7 +1,6 @@
-const Product = require('../models/product');
+import Product from '../models/product.js';
 
-// Obtenez tous les produits
-exports.getAllProducts = async (req, res) => {
+export const getAllProducts = async (req, res) => {
     try {
         const products = await Product.find({});
         res.status(200).json(products);
@@ -10,8 +9,7 @@ exports.getAllProducts = async (req, res) => {
     }
 };
 
-// Ajouter un produit
-exports.addProduct = async (req, res) => {
+export const addProduct = async (req, res) => {
     try {
         const newProduct = new Product(req.body);
         await newProduct.save();
@@ -21,8 +19,7 @@ exports.addProduct = async (req, res) => {
     }
 };
 
-// Mettre à jour un produit
-exports.updateProduct = async (req, res) => {
+export const updateProduct = async (req, res) => {
     try {
         const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.status(200).json(updatedProduct);
@@ -31,10 +28,11 @@ exports.updateProduct = async (req, res) => {
     }
 };
 
-// Supprimer un produit
-exports.deleteProduct = async (req, res) => {
+export const deleteProduct = async (req, res) => {
     try {
-        await Product.fidByIdAndDelete(req.params.id);
+        await Product.findByIdAndDelete(req.params.id);
         res.status(200).json({ message: 'Product deleted' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };

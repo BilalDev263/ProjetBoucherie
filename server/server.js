@@ -1,9 +1,11 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+import express from 'express';
+import mongoose from 'mongoose';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import productRoutes from './routes/products.js';
 
-require('dotenv').config();
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,10 +18,13 @@ app.use(bodyParser.json());
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}).then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+})
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.log(err));
 
 // Routes
+app.use('/api/products', productRoutes);
+
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
@@ -28,7 +33,3 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-
-const productRoutes = require('./routes/products');
-
-app.use('/api/products', productRoutes);
